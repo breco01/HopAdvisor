@@ -1,4 +1,4 @@
-import {use, useState} from 'react'
+import {useState} from 'react'
 import './App.css'
 
 function App() {
@@ -17,7 +17,7 @@ function App() {
             const response = await fetch("/api/recommendations", {
                 method: "POST",
                 headers: {
-                    "Content-Type": "applications/json",
+                    "Content-Type": "application/json",
                 },
                 body: JSON.stringify({preferences}),
             });
@@ -35,7 +35,7 @@ function App() {
                             errorData.error ||
                             errorData.message ||
                             message;
-                    } catch (e) {
+                    } catch {
                         //skip
                     }
                 } else if (text) {
@@ -50,7 +50,7 @@ function App() {
                 return;
             }
 
-            if (!contentType.Includes("applications/json")) {
+            if (!contentType.includes("application/json")) {
                 throw new Error("Server gaf geen JSON terug.");
             }
 

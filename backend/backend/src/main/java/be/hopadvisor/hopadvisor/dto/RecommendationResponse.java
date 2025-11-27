@@ -12,4 +12,12 @@ public class RecommendationResponse {
     public RecommendationResponse(List<BeerRecommendation> recommendations) {
         this.recommendations = recommendations;
     }
+
+    public List<BeerRecommendation> getRecommendations() {
+        return recommendations;
+    }
+
+    public void setRecommendations(List<BeerRecommendation> recommendations) {
+        this.recommendations = recommendations;
+    }
 }

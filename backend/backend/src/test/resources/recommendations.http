@@ -1,0 +1,6 @@
+POST http://localhost:8080/api/recommendations
+Content-Type: application/json
+
+{
+  "preferences": "iets fruitig en hoppig"
+}
