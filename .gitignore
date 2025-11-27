@@ -1,0 +1,41 @@
+# =======================================
+# JAVA & SPRING BOOT
+# =======================================
+target/
+*.class
+*.log
+*.jar
+*.war
+*.ear
+hs_err_pid*
+replay_pid*
+backend/.idea/
+backend/.classpath
+backend/.project
+backend/.settings/
+
+# INTELLIJ IDEA
+.idea/
+*.iml
+
+# =======================================
+# NODE / REACT / VITE
+# =======================================
+node_modules/
+dist/
+build/
+frontend/node_modules/
+frontend/dist/
+
+# =======================================
+# ENV FILES
+# =======================================
+*.env
+*.env.local
+*.env.*.local
+
+# =======================================
+# GENERAL
+# =======================================
+.DS_Store
+Thumbs.db
