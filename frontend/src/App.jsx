@@ -1,4 +1,4 @@
-import {use, useState} from 'react'
+import {useState} from 'react'
 import './App.css'
 
 function App() {
@@ -17,44 +17,42 @@ function App() {
             const response = await fetch("/api/recommendations", {
                 method: "POST",
                 headers: {
-                    "Content-Type": "applications/json",
+                    "Content-Type": "application/json",
                 },
-                body: JSON.stringify({preferences}),
+                body: JSON.stringify({ preferences }),
             });
 
-            const contentType = response.headers.get("content-type") || "";
             const text = await response.text();
+            console.log("RAW response:", response.status, text);
 
             if (!response.ok) {
-                let message = "Er ging iets mis bij het ophalen van aanbevelingen."
+                let message = "Er ging iets mis bij het ophalen van aanbevelingen.";
 
-                if (contentType.includes("applications/json") && text) {
-                    try {
-                        const errorData = JSON.parse(text);
-                        message =
-                            errorData.error ||
-                            errorData.message ||
-                            message;
-                    } catch (e) {
-                        //skip
+                try {
+                    const errorData = JSON.parse(text);
+                    message = errorData.error || errorData.message || message;
+                } catch {
+                    if (text) {
+                        message = text;
                     }
-                } else if (text) {
-                    message = text;
                 }
 
                 throw new Error(message);
             }
 
             if (!text) {
-                setRecommendations([]);
+                setError("Server gaf een lege respons terug.");
                 return;
             }
 
-            if (!contentType.Includes("applications/json")) {
-                throw new Error("Server gaf geen JSON terug.");
+            let data;
+            try {
+                data = JSON.parse(text);
+            } catch {
+                setError("Server gaf geen geldige JSON terug: " + text);
+                return;
             }
 
-            const data = JSON.parse(text);
             setRecommendations(data.recommendations || []);
         } catch (err) {
             console.error(err);
@@ -63,6 +61,8 @@ function App() {
             setLoading(false);
         }
     }
+
+
 
     return (
         <div
