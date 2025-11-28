@@ -27,9 +27,11 @@ public class RecommendationService {
 
             return new RecommendationResponse(List.of(aiBased));
         } catch (Exception ex) {
+            ex.printStackTrace();
             return getMockRecommendation(preferences);
         }
     }
+
 
     public RecommendationResponse getMockRecommendation(String preferences) {
         List<BeerRecommendation> beers = List.of(

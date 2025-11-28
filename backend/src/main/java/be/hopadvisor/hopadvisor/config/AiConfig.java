@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class AiConfig {
 
-    @Value("${hopadvisor.api-key:}")
+    @Value("${hopadvisor.openai.api-key:}")
     private String openAiApiKey;
 
     @Value("${hopadvisor.openai.model:gpt-4o-mini}")

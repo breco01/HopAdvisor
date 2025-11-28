@@ -12,7 +12,7 @@ public interface BeerAdvisorAiService {
             """)
     @UserMessage("""
             De gebruiker geeft deze voorkeuren voor bier:
-            {{preferences}}
+            {{it}}
             
             Geef een korte, vlot leesbare tekst (max. 5 zinnen) waarin je drie concrete bieren aanbeveelt
             en kort uitlegt waarom ze passen bij deze voorkeur.
