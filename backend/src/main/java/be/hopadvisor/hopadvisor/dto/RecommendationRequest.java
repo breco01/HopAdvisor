@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 
 public class RecommendationRequest {
 
-    @NotBlank(message = "Voorkeur mag niet leeg zijn.")
+    @NotBlank(message = "Beschrijf even waar je zin in hebt (bijvoorbeeld= iets fruitig en hoppig).")
     private String preferences;
 
     public RecommendationRequest(){

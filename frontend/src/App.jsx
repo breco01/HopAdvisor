@@ -28,16 +28,20 @@ function App() {
             if (!response.ok) {
                 let message = "Er ging iets mis bij het ophalen van aanbevelingen.";
 
+                if(text){
                 try {
                     const errorData = JSON.parse(text);
-                    message = errorData.error || errorData.message || message;
+                    message =
+                        errorData.message ||
+                        errorData.error ||
+                        message;
                 } catch {
-                    if (text) {
                         message = text;
                     }
                 }
 
                 throw new Error(message);
+
             }
 
             if (!text) {
