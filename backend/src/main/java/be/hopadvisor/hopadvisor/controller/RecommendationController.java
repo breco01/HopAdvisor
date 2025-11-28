@@ -21,6 +21,6 @@ public class RecommendationController {
 
     @PostMapping
     public RecommendationResponse getRecommendations(@Valid @RequestBody RecommendationRequest request){
-        return recommendationService.getMockRecommendation(request.getPreferences());
+        return recommendationService.getRecommendations(request.getPreferences());
     }
 }
