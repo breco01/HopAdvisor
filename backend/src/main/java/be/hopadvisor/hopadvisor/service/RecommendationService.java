@@ -9,7 +9,29 @@ import java.util.List;
 @Service
 public class RecommendationService {
 
-    public RecommendationResponse getMockRecommendation(String preferences){
+    private final BeerAdvisorAiService beerAdvisorAiService;
+
+    public RecommendationService(BeerAdvisorAiService beerAdvisorAiService){
+        this.beerAdvisorAiService = beerAdvisorAiService;
+    }
+
+    public RecommendationResponse getRecommendations(String preferences) {
+        try {
+            String aiText = beerAdvisorAiService.generateRecommendationsText(preferences);
+
+            BeerRecommendation aiBased = new BeerRecommendation(
+                    "AI-aanbevelingen",
+                    "AI-advies",
+                    aiText
+            );
+
+            return new RecommendationResponse(List.of(aiBased));
+        } catch (Exception ex) {
+            return getMockRecommendation(preferences);
+        }
+    }
+
+    public RecommendationResponse getMockRecommendation(String preferences) {
         List<BeerRecommendation> beers = List.of(
                 new BeerRecommendation(
                         "Stella Artois",
