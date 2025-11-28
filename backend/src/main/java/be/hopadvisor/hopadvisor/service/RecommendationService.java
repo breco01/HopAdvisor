@@ -3,6 +3,7 @@ package be.hopadvisor.hopadvisor.service;
 import be.hopadvisor.hopadvisor.dto.BeerRecommendation;
 import be.hopadvisor.hopadvisor.dto.RecommendationResponse;
 import org.springframework.stereotype.Service;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
 
@@ -10,6 +11,7 @@ import java.util.List;
 public class RecommendationService {
 
     private final BeerAdvisorAiService beerAdvisorAiService;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     public RecommendationService(BeerAdvisorAiService beerAdvisorAiService){
         this.beerAdvisorAiService = beerAdvisorAiService;
@@ -17,17 +19,20 @@ public class RecommendationService {
 
     public RecommendationResponse getRecommendations(String preferences) {
         try {
-            String aiText = beerAdvisorAiService.generateRecommendationsText(preferences);
+            String json = beerAdvisorAiService.generateRecommendationsJson(preferences);
 
-            BeerRecommendation aiBased = new BeerRecommendation(
-                    "AI-aanbevelingen",
-                    "AI-advies",
-                    aiText
-            );
+            RecommendationResponse aiResponse =
+                    objectMapper.readValue(json, RecommendationResponse.class);
 
-            return new RecommendationResponse(List.of(aiBased));
+            List<BeerRecommendation> recs = aiResponse.getRecommendations();
+
+            if(recs == null || recs.isEmpty()){
+                return getMockRecommendation(preferences);
+            }
+
+            return aiResponse;
+
         } catch (Exception ex) {
-            ex.printStackTrace();
             return getMockRecommendation(preferences);
         }
     }

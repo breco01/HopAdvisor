@@ -9,13 +9,32 @@ public interface BeerAdvisorAiService {
             Je bent een Belgische biersommelier.
             Je geeft bieraanbevelingen op basis van voorkeuren van de gebruiker.
             Antwoord altijd in het Nederlands.
+            Geef ALTIJD geldig JSON terug volgens de gevraagde structuur.
             """)
     @UserMessage("""
             De gebruiker geeft deze voorkeuren voor bier:
             {{it}}
             
-            Geef een korte, vlot leesbare tekst (max. 5 zinnen) waarin je drie concrete bieren aanbeveelt
-            en kort uitlegt waarom ze passen bij deze voorkeur.
+            Geef EXACT de volgende JSON-structuur terug, zonder extra tekst ervoor of erna:
+            {
+              "recommendations": [
+                {
+                  "name": "NAAM VAN HET BIER",
+                  "style": "STIJL VAN HET BIER",
+                  "description": "KORTE NEDERLANDSTALIGE BESCHRIJVING WAAROM DIT BIER PAST"
+                },
+                {
+                  "name": "...",
+                  "style": "...",
+                  "description": "..."
+                },
+                {
+                  "name": "...",
+                  "style": "...",
+                  "description": "..."
+                }
+              ]
+            }
             """)
-    String generateRecommendationsText(String preferences);
+    String generateRecommendationsJson(String preferences);
 }
