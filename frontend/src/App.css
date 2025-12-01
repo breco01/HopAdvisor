@@ -46,11 +46,11 @@ body {
     padding: 2rem;
 }
 
-/* HOOFD-KAART: desktop */
+/* Hoofdkaart */
 
 .panel {
     width: 100%;
-    max-width: 900px;
+    max-width: 980px;
     height: 600px; /* vaste hoogte op desktop */
     background: linear-gradient(
             135deg,
@@ -60,12 +60,13 @@ body {
     border-radius: var(--radius-lg);
     border: 1px solid rgba(73, 71, 91, 0.85);
     box-shadow: 0 30px 70px rgba(0, 0, 0, 0.85);
-    padding: 2rem 2.1rem;
+    padding: 1.9rem 2rem;
     display: flex;
     flex-direction: column;
 }
 
-@media (min-width: 768px) {
+/* stabiele breedte op grotere schermen */
+@media (min-width: 900px) {
     .panel {
         min-width: 900px;
     }
@@ -104,95 +105,46 @@ body {
     color: var(--text-muted);
 }
 
-/* Login / auth blok */
+/* Hoofdindeling: links (prompt+resultaten), rechts (login+geschiedenis) */
 
-.panel-auth {
-    margin-bottom: 1.1rem;
-}
-
-.auth-grid {
+.panel-main {
+    flex: 1;
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 0.75rem;
-    align-items: flex-end;
+    grid-template-columns: minmax(0, 1.7fr) minmax(0, 1.3fr);
+    gap: 1.3rem;
+    min-height: 0;
 }
 
-.auth-field {
+.panel-left,
+.panel-right {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    min-height: 0;
 }
 
-.auth-label {
-    font-size: 0.8rem;
+.section-title {
+    margin: 0 0 0.4rem 0;
+    font-size: 0.95rem;
     font-weight: 500;
     color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
 }
 
-.auth-input {
-    padding: 0.55rem 0.75rem;
-    border-radius: 10px;
-    border: 1px solid rgba(73, 71, 91, 0.95);
-    background: rgba(20, 8, 14, 0.7);
-    color: var(--text);
+.section-subtitle {
+    margin: 0 0 0.3rem 0;
     font-size: 0.9rem;
-    outline: none;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
-}
-
-.auth-input::placeholder {
-    color: var(--muted);
-    opacity: 0.85;
-}
-
-.auth-input:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 1px rgba(222, 184, 65, 0.45);
-    background: #2b1f30;
-}
-
-.auth-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-}
-
-.auth-button {
-    width: 100%;
-    padding: 0.55rem 0.85rem;
-    border-radius: var(--radius-pill);
-    border: none;
-    background: linear-gradient(135deg, var(--muted), var(--accent));
-    color: #14080e;
-    font-weight: 600;
-    font-size: 0.85rem;
-    cursor: pointer;
-    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.65);
-    transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease, opacity 0.12s ease;
-}
-
-.auth-button:hover:not(:disabled) {
-    transform: translateY(-1px);
-    filter: brightness(1.03);
-}
-
-.auth-button:active:not(:disabled) {
-    transform: translateY(0);
-    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.8);
-}
-
-.auth-button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
-.auth-hint {
-    margin: 0;
-    font-size: 0.8rem;
+    font-weight: 500;
     color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
 }
 
-/* Form */
+/* Linkerzijde: zoek + resultaten */
+
+.panel-search {
+    margin-bottom: 0.8rem;
+}
 
 .panel-form {
     display: flex;
@@ -264,7 +216,7 @@ body {
 /* Error */
 
 .panel-alert {
-    margin-top: 0.8rem;
+    margin-top: 0.4rem;
     padding: 0.7rem 0.9rem;
     border-radius: var(--radius-md);
     background: rgba(246, 71, 64, 0.14);
@@ -273,14 +225,15 @@ body {
     font-size: 0.9rem;
 }
 
-/* Resultaten – vaste zone binnen de kaart */
+/* Resultaten */
 
 .panel-results {
-    margin-top: 1.2rem;
     flex: 1;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    min-height: 0;
+    padding-top: 0.5rem;
+    border-top: 1px solid rgba(121, 148, 150, 0.3);
 }
 
 .panel-placeholder {
@@ -288,8 +241,6 @@ body {
     font-size: 0.9rem;
     color: var(--text-muted);
 }
-
-/* Lijst van resultaten – scrolt BINNEN de vaste hoogte */
 
 .results-list {
     margin-top: 0.4rem;
@@ -313,8 +264,6 @@ body {
     border-radius: 999px;
 }
 
-/* Kaarten voor bier */
-
 .beer-card {
     border-radius: var(--radius-md);
     padding: 0.75rem 0.85rem;
@@ -332,7 +281,7 @@ body {
 
 .beer-name {
     margin: 0;
-    font-size: 1rem;
+    font-size: 0.98rem;
     font-weight: 500;
 }
 
@@ -347,29 +296,127 @@ body {
 
 .beer-description {
     margin: 0;
+    font-size: 0.88rem;
+    color: var(--text-muted);
+}
+
+/* Rechterzijde: login + geschiedenis */
+
+.panel-right {
+    padding-left: 0.8rem;
+    border-left: 1px solid rgba(121, 148, 150, 0.3);
+    gap: 0.9rem;
+}
+
+/* Aanmelden */
+
+.panel-auth {
+    padding: 0.75rem 0.9rem;
+    border-radius: var(--radius-md);
+    background: rgba(20, 8, 14, 0.88);
+    border: 1px solid rgba(73, 71, 91, 0.85);
+    margin-bottom: 0.4rem;
+}
+
+.auth-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+}
+
+.auth-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.auth-label {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
+.auth-input {
+    padding: 0.55rem 0.75rem;
+    border-radius: 10px;
+    border: 1px solid rgba(73, 71, 91, 0.95);
+    background: rgba(14, 6, 10, 0.9);
+    color: var(--text);
     font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.auth-input::placeholder {
+    color: var(--muted);
+    opacity: 0.85;
+}
+
+.auth-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px rgba(222, 184, 65, 0.45);
+    background: #2b1f30;
+}
+
+.auth-button {
+    margin-top: 0.3rem;
+    padding: 0.55rem 0.9rem;
+    border-radius: var(--radius-pill);
+    border: none;
+    background: linear-gradient(135deg, var(--muted), var(--accent));
+    color: #14080e;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.65);
+    transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease, opacity 0.12s ease;
+}
+
+.auth-button:hover:not(:disabled) {
+    transform: translateY(-1px);
+    filter: brightness(1.03);
+}
+
+.auth-button:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.8);
+}
+
+.auth-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.auth-hint {
+    margin: 0;
+    font-size: 0.8rem;
     color: var(--text-muted);
 }
 
 /* Geschiedenis */
 
 .history-section {
-    margin-top: 1.2rem;
-    padding-top: 0.9rem;
-    border-top: 1px solid rgba(121, 148, 150, 0.35);
+    flex: 1;
+    padding: 0.75rem 0.9rem;
+    border-radius: var(--radius-md);
+    background: rgba(20, 8, 14, 0.88);
+    border: 1px solid rgba(73, 71, 91, 0.85);
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
 }
 
-.history-title {
-    margin: 0 0 0.55rem 0;
-    font-size: 1rem;
-    font-weight: 500;
+.history-placeholder {
+    margin: 0.3rem 0 0;
+    font-size: 0.86rem;
+    color: var(--text-muted);
 }
 
 .history-list {
+    margin-top: 0.4rem;
     display: flex;
     flex-direction: column;
     gap: 0.55rem;
-    max-height: 150px;
     overflow-y: auto;
     padding-right: 0.25rem;
 }
@@ -386,7 +433,7 @@ body {
 .history-item {
     border-radius: 10px;
     padding: 0.55rem 0.7rem;
-    background: rgba(20, 8, 14, 0.9);
+    background: rgba(11, 4, 7, 0.95);
     border: 1px solid rgba(73, 71, 91, 0.85);
     font-size: 0.86rem;
 }
@@ -463,25 +510,29 @@ body {
     .panel {
         width: 100%;
         max-width: 100%;
-        height: auto;          /* niet forceren op mobiel */
-        min-height: 520px;     /* wel nog “kaartgevoel” */
+        height: auto;
+        min-height: 520px;
         padding: 1.5rem 1.2rem;
         border-radius: 18px;
+    }
+
+    .panel-main {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .panel-right {
+        padding-left: 0;
+        border-left: none;
+        gap: 0.8rem;
     }
 
     .brand-name {
         font-size: 1.6rem;
     }
 
-    .panel-results {
-        margin-top: 1rem;
-    }
-
-    .results-list {
+    .results-list,
+    .history-list {
         padding-right: 0;
-    }
-
-    .auth-grid {
-        grid-template-columns: 1fr;
     }
 }
