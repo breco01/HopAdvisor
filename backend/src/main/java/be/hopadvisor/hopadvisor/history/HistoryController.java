@@ -15,12 +15,12 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/history")
-public class HostoryController {
+public class HistoryController {
 
     private final CurrentUserService currentUserService;
     private final SearchHistoryRepository searchHistoryRepository;
 
-    public HostoryController(CurrentUserService currentUserService, SearchHistoryRepository searchHistoryRepository) {
+    public HistoryController(CurrentUserService currentUserService, SearchHistoryRepository searchHistoryRepository) {
         this.currentUserService = currentUserService;
         this.searchHistoryRepository = searchHistoryRepository;
     }

@@ -53,4 +53,14 @@ public class GlobalExceptionHandler {
                 List.of(ex.getMessage())
         );
     }
+
+    @ExceptionHandler(IllegalStateException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ErrorResponse handleIllegalState(IllegalStateException ex){
+        return new ErrorResponse(
+                "UNAUTHORIZED",
+                ex.getMessage() != null ? ex.getMessage() : "Je moet ingelogd zijn voor deze actie.",
+                List.of()
+        );
+    }
 }
