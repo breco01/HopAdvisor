@@ -72,10 +72,22 @@ public class RecommendationService {
                 ? response.getRecommendations().size()
                 : 0;
 
+        String recommendationJson = "[]";
+        try{
+            recommendationJson = objectMapper.writeValueAsString(
+                    response.getRecommendations() != null
+                            ? response.getRecommendations()
+                            : List.of()
+            );
+        } catch (Exception e){
+
+        }
+
         SearchHistory history = new SearchHistory(
                 userOpt.get(),
                 preferences,
-                count
+                count,
+                recommendationJson
         );
 
         searchHistoryRepository.save(history);

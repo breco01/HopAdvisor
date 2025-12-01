@@ -22,16 +22,21 @@ public class SearchHistory {
     @Column(nullable = false)
     private int recommendationCount;
 
+    @Lob
+    @Column(name = "recommendations_json", nullable = false)
+    private String recommendationsJson;
+
     @Column(nullable = false)
     private Instant createdAt = Instant.now();
 
     protected SearchHistory(){
     }
 
-    public SearchHistory(User user, String preferences, int recommendationCount) {
+    public SearchHistory(User user, String preferences, int recommendationCount, String recommendationsJson) {
         this.user = user;
         this.preferences = preferences;
         this.recommendationCount = recommendationCount;
+        this.recommendationsJson = recommendationsJson;
     }
 
     public Long getId() {
@@ -48,6 +53,10 @@ public class SearchHistory {
 
     public int getRecommendationCount() {
         return recommendationCount;
+    }
+
+    public String getRecommendationsJson() {
+        return recommendationsJson;
     }
 
     public Instant getCreatedAt() {
