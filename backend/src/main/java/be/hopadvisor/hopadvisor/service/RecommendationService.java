@@ -2,41 +2,84 @@ package be.hopadvisor.hopadvisor.service;
 
 import be.hopadvisor.hopadvisor.dto.BeerRecommendation;
 import be.hopadvisor.hopadvisor.dto.RecommendationResponse;
+import be.hopadvisor.hopadvisor.history.SearchHistory;
+import be.hopadvisor.hopadvisor.history.SearchHistoryRepository;
+import be.hopadvisor.hopadvisor.user.CurrentUserService;
+import be.hopadvisor.hopadvisor.user.User;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RecommendationService {
 
     private final BeerAdvisorAiService beerAdvisorAiService;
+    private final boolean aiEnabled;
     private final ObjectMapper objectMapper = new ObjectMapper();
+    private final CurrentUserService currentUserService;
+    private final SearchHistoryRepository searchHistoryRepository;
 
-    public RecommendationService(BeerAdvisorAiService beerAdvisorAiService){
+    public RecommendationService(
+            BeerAdvisorAiService beerAdvisorAiService,
+            @Value("${hopadvisor.ai.enabled:true}") boolean aiEnabled,
+            CurrentUserService currentUserService,
+            SearchHistoryRepository searchHistoryRepository
+    ) {
         this.beerAdvisorAiService = beerAdvisorAiService;
+        this.aiEnabled = aiEnabled;
+        this.currentUserService = currentUserService;
+        this.searchHistoryRepository = searchHistoryRepository;
     }
 
     public RecommendationResponse getRecommendations(String preferences) {
-        try {
-            String json = beerAdvisorAiService.generateRecommendationsJson(preferences);
+        RecommendationResponse response;
 
-            RecommendationResponse aiResponse =
-                    objectMapper.readValue(json, RecommendationResponse.class);
+        if(!aiEnabled){
+            response = getMockRecommendation(preferences);
+        } else {
+            try {
+                String json = beerAdvisorAiService.generateRecommendationsJson(preferences);
 
-            List<BeerRecommendation> recs = aiResponse.getRecommendations();
+                RecommendationResponse aiResponse =
+                        objectMapper.readValue(json, RecommendationResponse.class);
 
-            if(recs == null || recs.isEmpty()){
-                return getMockRecommendation(preferences);
+                List<BeerRecommendation> recs = aiResponse.getRecommendations();
+
+                if (recs == null || recs.isEmpty()) {
+                    response = getMockRecommendation(preferences);
+                } else {
+                    response = aiResponse;
+                }
+            } catch (Exception ex) {
+                response = getMockRecommendation(preferences);
             }
-
-            return aiResponse;
-
-        } catch (Exception ex) {
-            return getMockRecommendation(preferences);
         }
+        logHistory(preferences, response);
+
+        return response;
     }
 
+    private void logHistory(String preferences, RecommendationResponse response) {
+        Optional<User> userOpt = currentUserService.getCurrenUser();
+        if(userOpt.isEmpty()){
+            return; //Anonymous user --> no history
+        }
+
+        int count = response.getRecommendations() != null
+                ? response.getRecommendations().size()
+                : 0;
+
+        SearchHistory history = new SearchHistory(
+                userOpt.get(),
+                preferences,
+                count
+        );
+
+        searchHistoryRepository.save(history);
+    }
 
     public RecommendationResponse getMockRecommendation(String preferences) {
         List<BeerRecommendation> beers = List.of(
